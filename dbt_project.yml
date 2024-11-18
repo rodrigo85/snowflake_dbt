@@ -1,0 +1,14 @@
+name: 'dbt_project'
+version: '1.0.0'
+
+profile: 'my_profile'
+
+model-paths: ["models"]
+models:
+  dbt_project:
+    raw:
+      +schema: "mflix_raw"
+      +path: "models/raw"
+    staging:
+      +schema: "mflix_staging"
+      +path: "models/staging"

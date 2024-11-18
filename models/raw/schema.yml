@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: flat_embedded_movie_raw
+    description: "Raw embedded movie data view loaded from S3 stage."

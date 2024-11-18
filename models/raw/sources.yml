@@ -1,0 +1,11 @@
+version: 1
+
+sources:
+  - name: main
+    database: dbt_project
+    schema: mflix_raw
+    tables:     
+      - name: embedded_movie_raw
+        description: "Raw embedded movie data view loaded from S3 stage."
+        meta:
+          is_view: true

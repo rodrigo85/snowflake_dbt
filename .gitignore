@@ -2,3 +2,5 @@ logs/
 dbt-env/
 *.exe
 .user.yml
+profiles.yml
+target/

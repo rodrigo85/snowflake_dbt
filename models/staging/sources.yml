@@ -1,0 +1,21 @@
+version: 1
+
+sources:
+  - name: main
+    database: dbt_project
+    schema: mflix_raw
+    tables:
+      - name: movie_raw
+        description: "Raw movies data view loaded from S3 stage."
+        meta:
+          is_view: true      
+      - name: comment_raw
+        description: "Movie comments data view loaded from S3 stage."
+        meta:
+          is_view: true
+      - name: user_raw
+        description: "Users list loaded from S3 stage."
+        meta:
+          is_view: true
+      - name: flat_embedded_movie_raw
+        description: "Raw embedded movies data view loaded from S3 stage."        

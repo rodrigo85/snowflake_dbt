@@ -1,0 +1,143 @@
+version: 2
+
+models:
+  - name: stg_comments
+    description: "Staging table for comments data extracted from the raw comments JSON data in MongoDB."
+    columns:
+      - name: id
+        description: "Unique identifier for each comment."
+        tests:
+          - not_null
+          - unique
+      - name: comment_timestamp
+        description: "Timestamp of the comment based on the extracted MongoDB date field."
+        tests:
+          - not_null
+      - name: email
+        description: "Email of the user who made the comment."
+        tests:
+          - not_null
+      - name: movie_id
+        description: "Unique identifier for the movie associated with the comment."
+        tests:
+          - not_null
+      - name: name
+        description: "Name of the user who made the comment."
+      - name: text
+        description: "The content of the comment."
+
+  - name: stg_embedded_movies
+    description: "Staging table for embedded movies data extracted from raw JSON data in MongoDB."
+    columns:
+      - name: id
+        description: "Unique identifier for the embedded movie data."
+        tests:
+          - not_null
+          - unique
+      - name: title
+        description: "Title of the movie."
+        tests:
+          - not_null
+      - name: type
+        description: "Type of movie (e.g., short, feature)."
+      - name: plot_embedding
+        description: "Plot embedding representation for movie analysis."
+        tests:
+          - not_null
+
+  - name: stg_movie_cast
+    description: "Staging table for movie cast data extracted from the raw movie cast JSON data."
+    columns:
+      - name: id
+        description: "Unique identifier for the movie cast record."
+        tests:
+          - not_null
+          - unique
+      - name: cast_member
+        description: "Name of the cast member."
+        tests:
+          - not_null
+
+  - name: stg_movies
+    description: "Staging table for raw movie data loaded from MongoDB BSON JSON files."
+    columns:
+      - name: id
+        description: "Unique identifier for the movie (ObjectId)."
+        tests:
+          - not_null
+          - unique
+      - name: title
+        description: "Title of the movie."
+        tests:
+          - not_null
+      - name: year
+        description: "Year the movie was released."
+      - name: runtime
+        description: "Runtime of the movie in minutes."
+      - name: released_timestamp
+        description: "Release date and time of the movie."
+      - name: directors_str
+        description: "Directors of the movie as a string."
+      - name: cast_str
+        description: "Cast of the movie as a string."
+      - name: languages_str
+        description: "Languages of the movie as a string."
+      - name: countries_str
+        description: "Countries where the movie was released as a string."
+      - name: awards_wins
+        description: "Number of awards won by the movie."
+      - name: awards_nominations
+        description: "Number of award nominations for the movie."
+      - name: awards_text
+        description: "Text description of awards for the movie."
+      - name: critic_rating
+        description: "Critic rating of the movie."
+      - name: viewer_rating
+        description: "Viewer rating of the movie."
+      - name: critic_num_reviews
+        description: "Number of reviews by critics."
+      - name: viewer_num_reviews
+        description: "Number of reviews by viewers."
+      - name: plot
+        description: "Short plot summary of the movie."
+      - name: fullplot
+        description: "Full plot summary of the movie."
+      - name: poster
+        description: "URL of the movie's poster."
+      - name: website
+        description: "URL of the movie's official website."
+      - name: writers_str
+        description: "Writers of the movie as a string."
+
+  - name: stg_users
+    description: "Staging table for users data extracted from the raw users JSON data in MongoDB."
+    columns:
+      - name: id
+        description: "Unique identifier for each user."
+        tests:
+          - not_null
+          - unique
+      - name: email
+        description: "Email of the user."
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Name of the user."
+        tests:
+          - not_null
+
+sources:
+  - name: main
+    description: "Source data from MongoDB collections loaded into Snowflake."
+    tables:
+      - name: flat_embedded_movie_raw
+        description: "Flattened raw data for embedded movies."
+      - name: comments
+        description: "Raw comments data."
+      - name: users
+        description: "Raw users data."
+      - name: movies
+        description: "Raw movie data."
+      - name: movie_cast
+        description: "Raw movie cast data."
