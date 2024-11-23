@@ -28,7 +28,21 @@ The process of creating stages and views has been automated to simplify the inge
 3. **Improve Reusability**: Enable seamless extension of the project to accommodate additional collections or datasets in the future.
 
 ### ▶️ Running the DBT Macro to Create Stages in Snowflake:
+
 <img src="docs/create_stage.png" height="250" alt="Create Stage" title="Create Stage">
 
-### ✅ Result of the DBT Macro Execution:
+Result of the DBT Macro Execution:
+
 <img src="docs/create_stage_result.png" height="250" alt="Create Stage Result" title="Create Stage Result">
+
+### ▶️ Running the DBT Macro to Create Views in Snowflake:
+
+<img src="docs/create_view.png" height="250" alt="Create View" title="Create View">
+
+Result of the DBT Macro Execution:
+
+<img src="docs/create_view_result.png" height="250" alt="Create View Result" title="Create View Result">
+
+### ✅ Now we can query the JSON files stored in S3 directly in Snowflake like this:
+
+<img src="docs/raw_view_content.png" height="250" alt="Raw content" title="Raw content">
