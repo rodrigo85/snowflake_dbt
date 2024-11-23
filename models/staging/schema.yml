@@ -131,8 +131,6 @@ sources:
   - name: main
     description: "Source data from MongoDB collections loaded into Snowflake."
     tables:
-      - name: flat_embedded_movie_raw
-        description: "Flattened raw data for embedded movies."
       - name: comments
         description: "Raw comments data."
       - name: users
