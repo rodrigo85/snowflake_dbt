@@ -43,6 +43,6 @@ Result of the DBT Macro Execution:
 
 <img src="docs/create_view_result.png" height="250" alt="Create View Result" title="Create View Result">
 
-### ✅ Now we can query the JSON files stored in S3 directly in Snowflake like this:
+### ✅ Now we can query the JSON files stored in S3 directly in Snowflake using previous view like this:
 
 <img src="docs/raw_view_content.png" height="250" alt="Raw content" title="Raw content">
