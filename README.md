@@ -27,6 +27,8 @@ The process of creating stages and views has been automated to simplify the inge
 2. **Enhance Consistency**: Ensure all stages and views adhere to a standardized structure and naming convention.
 3. **Improve Reusability**: Enable seamless extension of the project to accommodate additional collections or datasets in the future.
 
+The macros used for this process can be found in the [`macros`](./macros) folder.
+
 ### ▶️ Running the DBT Macro to Create Stages in Snowflake:
 
 <img src="docs/create_stage.png" height="250" alt="Create Stage" title="Create Stage">
@@ -46,3 +48,61 @@ Result of the DBT Macro Execution:
 ### ✅ Now we can query the JSON files stored in S3 directly in Snowflake using previous view like this:
 
 <img src="docs/raw_view_content.png" height="250" alt="Raw content" title="Raw content">
+
+### 🚀 Transforming JSON Data into a Structured Format
+
+In this part of the project, the results are saved into a **staging layer**, where the raw JSON data is transformed into a structured format. The **raw layer** serves as the source of truth, containing unaltered data as it was ingested from S3. The **staging layer** applies transformations, cleaning, and formatting to prepare the data for analysis.
+
+#### Why Use a Raw and Staging Layer?
+
+1. **Separation of Concerns**: The raw layer ensures that the original data remains untouched and can be reprocessed if necessary, while the staging layer handles transformations.
+2. **Data Traceability**: By maintaining the raw data, we can always trace back any processed data to its original form, ensuring accuracy and consistency.
+3. **Flexibility for Transformations**: The staging layer allows us to focus on cleaning and structuring the data without modifying the raw source, enabling iterative improvements.
+
+#### Focusing on the Movies Dataset
+
+To simplify the explanation and avoid unnecessary repetition, we will focus on the **movies dataset** for the remaining examples. The same principles and transformations can be applied to other datasets like `comments`, `users`, and `theaters`.
+
+---
+
+The raw JSON data retrieved from the views contains one JSON object per row, as shown above. To make this data more accessible for analysis, we apply a transformation step using DBT. This step parses the JSON data and converts it into a structured tabular format, while performing several data cleaning operations.
+
+#### 🧹 Types of Data Cleaning Applied
+
+The following types of data cleaning were performed in the [`stg_movies.sql`](./models/staging/stg_movies.sql) file:
+
+1. **Type Casting**:
+   - Converted JSON fields into appropriate Snowflake data types, such as `string`, `int`, and `timestamp`.
+   - Example: `REGEXP_REPLACE($1:"year"::string, '[^0-9]', '')::int` ensures the `year` field contains only numeric values.
+
+2. **Date and Time Parsing**:
+   - Extracted and converted timestamp values from nested JSON structures.
+   - Example: `TO_TIMESTAMP(GET_PATH($1:"released"['$date'], OBJECT_KEYS($1:"released"['$date'])[0])::bigint / 1000)` converts UNIX timestamps to Snowflake `TIMESTAMP`.
+
+3. **Nested JSON Extraction**:
+   - Used Snowflake functions like `GET_PATH` to access deeply nested fields.
+   - Example: `GET_PATH($1:"awards"['wins'], OBJECT_KEYS($1:"awards"['wins'])[0])::int` retrieves the number of awards won.
+
+4. **Text Processing**:
+   - Flattened array fields into comma-separated strings for easier querying and display.
+   - Example: `ARRAY_TO_STRING($1:"cast"::array, ', ')` converts the `cast` array into a single `cast_str` string.
+
+5. **Data Deduplication**:
+   - Removed duplicate entries based on the `title` field, ensuring unique movie records in the final output.
+   - Example: `AND NOT EXISTS (SELECT 1 FROM raw_data d WHERE r.title = d.title AND r.id != d.id)` eliminates duplicates by comparing IDs.
+
+6. **Error Handling for Nested Objects**:
+   - Managed cases where nested objects have inconsistent structures by using `OBJECT_KEYS` to dynamically access keys.
+
+#### ▶️ Running the DBT Model to Transform Movie Data:
+
+<img src="docs/staging_movies.png" height="250" alt="Running Transformation Model" title="Running Transformation Model">
+
+#### ✅ Result of the DBT Transformation Step:
+
+<img src="docs/stg_movies_result.png" height="250" alt="Structured Movie Data" title="Structured Movie Data">
+
+With the transformation complete, the movie data is now in a tabular format, ready for querying and further analysis.
+
+---
+
