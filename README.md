@@ -106,3 +106,18 @@ With the transformation complete, the movie data is now in a tabular format, rea
 
 ---
 
+#### 🧹 Breaking Down Multi-Value Columns into Multiple Rows
+
+In addition to parsing and cleaning the main `movies` dataset, we created a staging entity to handle columns containing **comma-separated text**. For example, the `cast` field in the `movies` dataset contains multiple cast members as a single array. To enable more granular analysis, we transformed this into a **row-per-value structure**.
+
+This step is implemented in the [`stg_movie_cast.sql`](./models/staging/stg_movie_cast.sql) file.
+
+#### Why Perform This Step?
+
+1. **Granular Analysis**: By transforming multi-value fields like `cast` into a row-per-value format, we can analyze individual elements more effectively (e.g., analyzing the frequency of actors across movies).
+2. **Easier Aggregations**: Having a normalized structure simplifies aggregations and filtering for reports or visualizations.
+3. **Data Integrity**: Ensures that no individual value is lost or overlooked due to being embedded in a larger text or array field.
+
+### Snowflake Database:
+
+<img src="docs/database.png" height="250" alt="Database" title="Database">
